@@ -60,7 +60,7 @@
   max-width: 1300px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0 var(--section-px);
+  padding: 0 max(var(--section-px), 7rem);
   box-sizing: border-box;
 }
 
@@ -175,6 +175,7 @@
 
   .hero__container {
     justify-content: center;
+    padding: 0 4rem;
   }
 
   .hero__content {
@@ -195,6 +196,7 @@
 
   .hero__container {
     justify-content: center;
+    padding: 0 3.25rem;
   }
 
   .hero__content {

@@ -16,3 +16,10 @@ body {
   font-family: var(--font-body);
   background: #ffffff;
 }
+
+input,
+textarea,
+select,
+button {
+  font-size: max(16px, 1em);
+}

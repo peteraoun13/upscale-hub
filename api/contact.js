@@ -1,30 +1,14 @@
-import nodemailer from 'nodemailer'
-import { resolve4 } from 'node:dns/promises'
+import {
+  bridgeNodeRequest,
+  clean,
+  cleanHeader,
+  escapeHtml,
+  getTransporter,
+  json,
+} from './mail.js'
 
 const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'peteraoun2013@gmail.com'
 const REQUIRED_FIELDS = ['fullName', 'institution', 'phone', 'email']
-
-function json(status, data) {
-  return Response.json(data, { status })
-}
-
-function clean(value) {
-  return String(value || '').trim()
-}
-
-function cleanHeader(value) {
-  return clean(value).replace(/[\r\n]+/g, ' ')
-}
-
-function escapeHtml(value) {
-  return clean(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-    .replace(/\n/g, '<br>')
-}
 
 function validate(payload) {
   const errors = {}
@@ -105,34 +89,6 @@ function buildMessage(data) {
   }
 }
 
-async function getTransporter() {
-  const configuredHost = process.env.SMTP_HOST
-  const port = Number(process.env.SMTP_PORT || 587)
-  const user = process.env.SMTP_USER
-  const pass = process.env.SMTP_PASS?.replace(/\s/g, '')
-
-  if (!configuredHost || !user || !pass) {
-    throw new Error('Missing SMTP_HOST, SMTP_USER, or SMTP_PASS environment variables.')
-  }
-
-  let host = configuredHost
-  const tls = {}
-
-  if (process.env.SMTP_FAMILY !== '6' && !/^\d+\.\d+\.\d+\.\d+$/.test(configuredHost)) {
-    const [ipv4Host] = await resolve4(configuredHost)
-    host = ipv4Host
-    tls.servername = configuredHost
-  }
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    tls,
-    auth: { user, pass },
-  })
-}
-
 export async function POST(request) {
   let payload
 
@@ -191,16 +147,6 @@ export async function GET() {
   return json(405, { message: 'Method not allowed.' })
 }
 
-async function readNodeBody(req) {
-  if (req.body) {
-    return typeof req.body === 'string' ? req.body : JSON.stringify(req.body)
-  }
-
-  const chunks = []
-  for await (const chunk of req) chunks.push(chunk)
-  return Buffer.concat(chunks).toString('utf8')
-}
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.statusCode = 405
@@ -209,14 +155,5 @@ export default async function handler(req, res) {
     return
   }
 
-  const request = new Request('http://localhost/api/contact', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: await readNodeBody(req),
-  })
-  const response = await POST(request)
-
-  res.statusCode = response.status
-  res.setHeader('Content-Type', response.headers.get('content-type') || 'application/json; charset=utf-8')
-  res.end(await response.text())
+  await bridgeNodeRequest(req, res, '/api/contact', POST)
 }
