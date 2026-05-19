@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import emailjs from '@emailjs/browser'
 import './Contact.css'
 import { useTranslation } from '../../i18n/useTranslation'
 
@@ -67,19 +66,18 @@ export default function Contact() {
     setStatus('sending')
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          fullName:    form.fullName,
-          institution: form.institution,
-          phone:       form.phone,
-          industry:    form.industry,
-          email:       form.email,
-          description: form.description,
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
+        body: JSON.stringify(form),
+      })
+
+      if (!response.ok) {
+        throw new Error('Contact request failed.')
+      }
+
       setStatus('success')
       setForm(INITIAL)
       setChecked(false)

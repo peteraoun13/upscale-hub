@@ -10,6 +10,8 @@ import icon4   from '../../assets/service-icon-4.png'
 import icon5   from '../../assets/service-icon-5.png'
 
 const ICONS = [icon1, icon2, icon3, icon4, icon5]
+const AUTO_ADVANCE_MS = 3500
+const SLIDE_TRANSITION = 'transform 0.95s cubic-bezier(0.22, 1, 0.36, 1)'
 
 function getItemsPerPage(width) {
   if (width <= 480)  return 1
@@ -32,15 +34,16 @@ function buildPages(items, perPage) {
 
 export default function Services() {
   const { t }                         = useTranslation()
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const initialItemsPerPage           = getItemsPerPage(window.innerWidth)
+  const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage)
   const [index, setIndex]             = useState(1)
   const [animate, setAnimate]         = useState(true)
+  const [autoPaused, setAutoPaused]   = useState(false)
   const trackRef                      = useRef(null)
+  const itemsPerPageRef               = useRef(initialItemsPerPage)
   const dragStart                     = useRef(null)
   const dragCurrent                   = useRef(null)
   const [dragOffset, setDragOffset]   = useState(0)
-
-  const itemsPerPage = getItemsPerPage(windowWidth)
 
   // Merge translated text with icons
   const BASE = useMemo(() =>
@@ -64,11 +67,6 @@ export default function Services() {
   )
 
   useEffect(() => {
-    setAnimate(false)
-    setIndex(1)
-  }, [itemsPerPage])
-
-  useEffect(() => {
     if (!animate) {
       requestAnimationFrame(() =>
         requestAnimationFrame(() => setAnimate(true))
@@ -77,28 +75,56 @@ export default function Services() {
   }, [animate])
 
   useEffect(() => {
-    const onResize = () => setWindowWidth(window.innerWidth)
+    const onResize = () => {
+      const nextItemsPerPage = getItemsPerPage(window.innerWidth)
+
+      if (itemsPerPageRef.current === nextItemsPerPage) return
+
+      itemsPerPageRef.current = nextItemsPerPage
+      setAnimate(false)
+      setIndex(1)
+      setItemsPerPage(nextItemsPerPage)
+    }
+
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
+
+  useEffect(() => {
+    if (totalPages <= 1 || autoPaused) return undefined
+
+    const timer = window.setInterval(() => {
+      setAnimate(true)
+      setIndex(currentIndex => Math.min(currentIndex + 1, extended.length - 1))
+    }, AUTO_ADVANCE_MS)
+
+    return () => window.clearInterval(timer)
+  }, [autoPaused, extended.length, index, totalPages])
 
   const onTransitionEnd = () => {
     if (index === 0) {
       setAnimate(false)
       setIndex(totalPages)
-    } else if (index === extended.length - 1) {
+    } else if (index >= extended.length - 1) {
       setAnimate(false)
       setIndex(1)
     }
   }
 
   const goTo = (i) => { setAnimate(true); setIndex(i) }
-  const prev = () => { setAnimate(true); setIndex(i => i - 1) }
-  const next = () => { setAnimate(true); setIndex(i => i + 1) }
+  const prev = () => {
+    setAnimate(true)
+    setIndex(i => Math.max(i - 1, 0))
+  }
+  const next = () => {
+    setAnimate(true)
+    setIndex(i => Math.min(i + 1, extended.length - 1))
+  }
 
   const activeDot = ((index - 1) % totalPages + totalPages) % totalPages
 
   const onDragStart = (clientX) => {
+    setAutoPaused(true)
     dragStart.current   = clientX
     dragCurrent.current = clientX
   }
@@ -114,6 +140,7 @@ export default function Services() {
     else if (diff > 50) prev()
     dragStart.current = null
     setDragOffset(0)
+    setAutoPaused(false)
   }
 
   const translateX = `calc(${-index * 100}% + ${dragOffset}px)`
@@ -140,9 +167,7 @@ export default function Services() {
             ref={trackRef}
             style={{
               transform:  `translateX(${translateX})`,
-              transition: animate
-                ? 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-                : 'none',
+              transition: animate ? SLIDE_TRANSITION : 'none',
             }}
             onTransitionEnd={onTransitionEnd}
           >

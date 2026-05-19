@@ -78,13 +78,32 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+  .partners__grid {
+    gap: 1.25rem 0.75rem;
+  }
+
   .partner-card__anchor {
-    flex: 0 0 calc(50% - 1rem);
+    flex: 0 0 calc(50% - 0.75rem);
+  }
+
+  .partner-card {
+    min-height: 86px;
+    padding: 0.5rem 0.35rem;
+  }
+
+  .partner-card__img {
+    max-width: min(135px, 100%);
+    max-height: 72px;
   }
 }
 
 @media (max-width: 400px) {
   .partner-card__anchor {
-    flex: 0 0 100%;
+    flex: 0 0 calc(50% - 0.75rem);
+  }
+
+  .partner-card__img {
+    max-width: min(118px, 100%);
+    max-height: 64px;
   }
 }
