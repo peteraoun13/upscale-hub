@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Contact.css'
 import { useTranslation } from '../../i18n/useTranslation'
 
@@ -33,6 +33,20 @@ export default function Contact() {
   const [errors,  setErrors]  = useState({})
   const [status,  setStatus]  = useState('idle')
   const [checked, setChecked] = useState(false)
+  const successCloseRef = useRef(null)
+
+  useEffect(() => {
+    if (status !== 'success') return undefined
+
+    successCloseRef.current?.focus()
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setStatus('idle')
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [status])
 
   const validate = (data) => {
     const e = {}
@@ -214,11 +228,6 @@ export default function Contact() {
           </div>
           {errors.captcha && <span className="contact__error">{errors.captcha}</span>}
 
-          {status === 'success' && (
-            <p className="contact__feedback contact__feedback--success">
-              ✅ Message sent successfully!
-            </p>
-          )}
           {status === 'error' && (
             <p className="contact__feedback contact__feedback--error">
               ❌ Something went wrong. Please try again.
@@ -235,6 +244,42 @@ export default function Contact() {
 
         </form>
       </div>
+
+      {status === 'success' && (
+        <div className="contact-modal" role="presentation">
+          <button
+            className="contact-modal__backdrop"
+            type="button"
+            aria-label="Close success message"
+            onClick={() => setStatus('idle')}
+          />
+          <div
+            className="contact-modal__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contact-success-title"
+            aria-describedby="contact-success-desc"
+          >
+            <div className="contact-modal__icon" aria-hidden="true">
+              <span />
+            </div>
+            <div className="contact-modal__copy">
+              <h3 id="contact-success-title">Message sent successfully!</h3>
+              <p id="contact-success-desc">
+                Thank you for reaching out. We received your information and will get back to you soon.
+              </p>
+            </div>
+            <button
+              ref={successCloseRef}
+              className="contact-modal__close"
+              type="button"
+              onClick={() => setStatus('idle')}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
