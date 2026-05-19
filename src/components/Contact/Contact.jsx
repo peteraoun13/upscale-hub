@@ -2,50 +2,100 @@ import { useEffect, useRef, useState } from 'react'
 import './Contact.css'
 import { useTranslation } from '../../i18n/useTranslation'
 
-import mapImg    from '../../assets/contact-map.png'
+import mapImg from '../../assets/contact-map.png'
 import phoneIcon from '../../assets/contact-phone.png'
 import emailIcon from '../../assets/contact-email.png'
 
 const PHONES = [
-  { country: 'France',  number: '+33 6 46708896' },
-  { country: 'Lebanon', number: '+961 5 927000'  },
-  { country: 'UAE',     number: '+33 7 48647014' },
+  { country: 'France', number: '+33 6 46708896' },
+  { country: 'Lebanon', number: '+961 5 927000' },
+  { country: 'UAE', number: '+33 7 48647014' },
 ]
 
 const INITIAL = {
-  fullName: '', institution: '', phone: '',
-  industry: '', email: '',      description: '',
+  fullName: '',
+  institution: '',
+  phone: '',
+  industry: '',
+  email: '',
+  description: '',
 }
 
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+
 const VALIDATORS = {
-  fullName:    (v) => v.trim().length < 2      ? 'Full name is required.'          : '',
-  institution: (v) => v.trim().length < 2      ? 'Institution name is required.'   : '',
-  phone:       (v) => !/^\+?[\d\s\-()]{6,}$/.test(v.trim()) ? 'Enter a valid phone number.' : '',
-  industry:    ()  => '',
-  email:       (v) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'Enter a valid email address.' : '',
-  description: ()  => '',
+  fullName: (v) => v.trim().length < 2 ? 'Full name is required.' : '',
+  institution: (v) => v.trim().length < 2 ? 'Institution name is required.' : '',
+  phone: (v) => !/^\+?[\d\s\-()]{6,}$/.test(v.trim()) ? 'Enter a valid phone number.' : '',
+  industry: () => '',
+  email: (v) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'Enter a valid email address.' : '',
+  description: () => '',
 }
 
 export default function Contact() {
   const { t } = useTranslation()
 
-  const [form,    setForm]    = useState(INITIAL)
-  const [errors,  setErrors]  = useState({})
-  const [status,  setStatus]  = useState('idle')
-  const [checked, setChecked] = useState(false)
+  const [form, setForm] = useState(INITIAL)
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState('idle')
+  const [captchaToken, setCaptchaToken] = useState('')
+  const captchaRef = useRef(null)
+  const captchaWidgetRef = useRef(null)
   const successCloseRef = useRef(null)
+
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY) return undefined
+
+    let cancelled = false
+
+    const renderCaptcha = () => {
+      if (cancelled || !captchaRef.current || !window.grecaptcha || captchaWidgetRef.current !== null) return
+
+      captchaWidgetRef.current = window.grecaptcha.render(captchaRef.current, {
+        sitekey: RECAPTCHA_SITE_KEY,
+        callback: (token) => {
+          setCaptchaToken(token)
+          setErrors(err => ({ ...err, captcha: '' }))
+        },
+        'expired-callback': () => setCaptchaToken(''),
+        'error-callback': () => setCaptchaToken(''),
+      })
+    }
+
+    if (window.grecaptcha) {
+      window.grecaptcha.ready(renderCaptcha)
+    } else {
+      const existingScript = document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')
+      const script = existingScript || document.createElement('script')
+
+      script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+      script.async = true
+      script.defer = true
+      script.onload = () => window.grecaptcha?.ready(renderCaptcha)
+
+      if (!existingScript) document.head.appendChild(script)
+    }
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     if (status !== 'success') return undefined
 
     successCloseRef.current?.focus()
+    document.body.style.overflow = 'hidden'
 
     const onKeyDown = (event) => {
       if (event.key === 'Escape') setStatus('idle')
     }
 
     document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', onKeyDown)
+    }
   }, [status])
 
   const validate = (data) => {
@@ -55,6 +105,13 @@ export default function Contact() {
       if (msg) e[k] = msg
     })
     return e
+  }
+
+  const resetCaptcha = () => {
+    setCaptchaToken('')
+    if (window.grecaptcha && captchaWidgetRef.current !== null) {
+      window.grecaptcha.reset(captchaWidgetRef.current)
+    }
   }
 
   const handleChange = (e) => {
@@ -72,8 +129,8 @@ export default function Contact() {
       return
     }
 
-    if (!checked) {
-      setErrors(err => ({ ...err, captcha: 'Please confirm you are not a robot.' }))
+    if (!RECAPTCHA_SITE_KEY || !captchaToken) {
+      setErrors(err => ({ ...err, captcha: 'Please complete the reCAPTCHA.' }))
       return
     }
 
@@ -85,7 +142,7 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, captchaToken }),
       })
 
       if (!response.ok) {
@@ -94,19 +151,18 @@ export default function Contact() {
 
       setStatus('success')
       setForm(INITIAL)
-      setChecked(false)
       setErrors({})
+      resetCaptcha()
     } catch (err) {
       console.error(err)
       setStatus('error')
+      resetCaptcha()
     }
   }
 
   return (
     <section className="contact" id="contact">
       <div className="contact__inner">
-
-        {/* ── Left ── */}
         <div className="contact__left">
           <h2 className="contact__heading">{t('contact.heading')}</h2>
 
@@ -137,9 +193,7 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* ── Right — form ── */}
         <form className="contact__form" onSubmit={handleSubmit} noValidate>
-
           <div className="contact__form-row">
             <div className="contact__field">
               <input
@@ -211,26 +265,17 @@ export default function Contact() {
           />
 
           <div className="contact__captcha">
-            <input
-              type="checkbox"
-              id="robot"
-              checked={checked}
-              onChange={e => {
-                setChecked(e.target.checked)
-                if (errors.captcha) setErrors(err => ({ ...err, captcha: '' }))
-              }}
-            />
-            <label htmlFor="robot">{t('contact.notRobot')}</label>
-            <div className="contact__captcha-logo">
-              <span>reCAPTCHA</span>
-              <span>Privacy · Terms</span>
-            </div>
+            {RECAPTCHA_SITE_KEY ? (
+              <div ref={captchaRef} />
+            ) : (
+              <p className="contact__captcha-missing">reCAPTCHA site key is missing.</p>
+            )}
           </div>
           {errors.captcha && <span className="contact__error">{errors.captcha}</span>}
 
           {status === 'error' && (
             <p className="contact__feedback contact__feedback--error">
-              ❌ Something went wrong. Please try again.
+              Something went wrong. Please try again.
             </p>
           )}
 
@@ -239,9 +284,8 @@ export default function Contact() {
             className="contact__submit"
             disabled={status === 'sending'}
           >
-            {status === 'sending' ? 'Sending…' : t('contact.submit')}
+            {status === 'sending' ? 'Sending...' : t('contact.submit')}
           </button>
-
         </form>
       </div>
 

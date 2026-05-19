@@ -46,6 +46,32 @@ function validate(payload) {
   return errors
 }
 
+async function verifyRecaptcha(token) {
+  const secret = process.env.RECAPTCHA_SECRET_KEY
+
+  if (!secret) {
+    throw new Error('Missing RECAPTCHA_SECRET_KEY environment variable.')
+  }
+
+  if (!clean(token)) return false
+
+  const body = new URLSearchParams({
+    secret,
+    response: token,
+  })
+
+  const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body,
+  })
+  const result = await response.json()
+
+  return Boolean(result.success)
+}
+
 function buildMessage(data) {
   const submittedAt = new Date().toLocaleString('en-US', {
     dateStyle: 'medium',
@@ -121,6 +147,16 @@ export async function POST(request) {
     return json(400, { message: 'Validation failed.', errors })
   }
 
+  try {
+    const captchaPassed = await verifyRecaptcha(payload.captchaToken)
+    if (!captchaPassed) {
+      return json(400, { message: 'reCAPTCHA verification failed.' })
+    }
+  } catch (error) {
+    console.error('reCAPTCHA verification failed:', error)
+    return json(500, { message: 'Could not verify reCAPTCHA.' })
+  }
+
   const data = {
     fullName: clean(payload.fullName),
     institution: clean(payload.institution),
@@ -153,4 +189,34 @@ export async function POST(request) {
 
 export async function GET() {
   return json(405, { message: 'Method not allowed.' })
+}
+
+async function readNodeBody(req) {
+  if (req.body) {
+    return typeof req.body === 'string' ? req.body : JSON.stringify(req.body)
+  }
+
+  const chunks = []
+  for await (const chunk of req) chunks.push(chunk)
+  return Buffer.concat(chunks).toString('utf8')
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.statusCode = 405
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    res.end(JSON.stringify({ message: 'Method not allowed.' }))
+    return
+  }
+
+  const request = new Request('http://localhost/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: await readNodeBody(req),
+  })
+  const response = await POST(request)
+
+  res.statusCode = response.status
+  res.setHeader('Content-Type', response.headers.get('content-type') || 'application/json; charset=utf-8')
+  res.end(await response.text())
 }

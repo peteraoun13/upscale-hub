@@ -107,7 +107,7 @@
   border-radius: 25px;
   background: #f0f4fb;
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 16px;
   color: var(--color-text-dark);
   outline: none;
   transition: background var(--transition-fast),
@@ -148,40 +148,15 @@
 .contact__captcha {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background: #f0f4fb;
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
+  justify-content: flex-start;
+  min-height: 78px;
   width: fit-content;
 }
 
-.contact__captcha input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  accent-color: var(--color-brand-blue);
-}
-
-.contact__captcha label {
+.contact__captcha-missing {
   font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--color-text-dark);
-  cursor: pointer;
-}
-
-.contact__captcha-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 1rem;
-  padding-left: 1rem;
-  border-left: 1px solid #dde3ef;
-}
-
-.contact__captcha-logo span {
-  font-size: 0.65rem;
-  color: #aab0c0;
-  line-height: 1.4;
+  font-size: 0.88rem;
+  color: #E8453C;
 }
 
 /* Feedback */
@@ -369,12 +344,12 @@
   }
 
   .contact-modal {
-    align-items: end;
+    place-items: center;
     padding: 1rem;
   }
 
   .contact-modal__dialog {
-    width: 100%;
+    width: min(100%, 380px);
     padding: 1.6rem 1.25rem 1.35rem;
     border-radius: 18px;
   }
@@ -386,5 +361,12 @@
 
   .contact-modal__close {
     width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .contact__captcha {
+    transform: scale(0.9);
+    transform-origin: left center;
   }
 }
