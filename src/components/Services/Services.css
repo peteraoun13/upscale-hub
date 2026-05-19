@@ -1,0 +1,164 @@
+.services {
+  position: relative;
+  background: #ffffff;
+  padding: 5rem 0 4rem;
+}
+
+/* ── Decorative circle ── */
+/* ── Decorative circle ── */
+.services__deco {
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: auto;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.services__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ── Heading ── */
+.services__heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-dark);
+  margin-bottom: 3rem;
+  text-align: center;
+  width: 100%;
+  padding: 0 var(--section-px);
+  box-sizing: border-box;
+}
+
+/* ── Viewport ── */
+.services__viewport {
+  width: 100%;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+}
+
+.services__viewport:active { cursor: grabbing; }
+
+/* ── Track ── */
+.services__track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+/* ── Page ── */
+.services__page {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  padding: 0 var(--section-px);
+  box-sizing: border-box;
+}
+
+/* ── Card ── */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem 1.5rem;
+}
+
+/* Icon — PNG only, no background */
+.service-card__icon-wrap {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.service-card__icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Title */
+.service-card__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-dark);
+  line-height: 1.3;
+}
+
+/* Description */
+.service-card__desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-body);
+  line-height: 1.7;
+}
+
+/* ── Dots ── */
+.services__dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 3rem;
+}
+
+.services__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #cccccc;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.services__dot--active {
+  background: var(--color-brand-blue);
+  transform: scale(1.2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .services__page { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .services__deco { display: none; }
+  .services__page { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .services__page { grid-template-columns: 1fr; }
+
+  .service-card__icon-wrap {
+    width: 130px;
+    height: 130px;
+  }
+
+  .service-card__title { font-size: 1.2rem; }
+
+  .service-card__desc {
+    font-size: 0.95rem;
+    max-width: 300px;
+  }
+}

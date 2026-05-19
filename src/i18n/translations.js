@@ -1,0 +1,226 @@
+const translations = {
+  en: {
+    nav: {
+      about:    'About Us',
+      services: 'Services',
+      careers:  'Careers',
+      contact:  'Contact Us',
+      training: 'Training Center',
+    },
+    hero: {
+      slides: [
+        { heading: ['We Invest In Your', 'Growth Journey'] },
+        { heading: ['We Build Your',     'Digital Future'] },
+        { heading: ['We Power Your',     'Innovation']     },
+      ],
+      cta: 'more',
+    },
+    footer: {
+      copy: '2024 © Upscale Hub. All rights reserved.',
+    },
+    whyus: {
+      heading: 'Providing a <strong>creative</strong> stream of <strong>solutions</strong> crafted with <strong>expertise</strong>',
+      desc:    'Our talents are skilled at thinking outside the box to generate innovative ideas and find novel solutions to complex problems.',
+      cta:     'more',
+    },
+    services: {
+      heading: 'Our Services',
+      items: [
+        { title: 'Digital Transformation',
+          description: 'We help organizations modernize their operations by replacing manual, fragmented, and legacy processes with integrated digital systems and AI agents tailored to their needs.' },
+        { title: 'Artificial Intelligence',
+          description: 'We revolutionize your operations with our innovative AI-based solutions and machine learning implementations.' },
+        { title: 'Game Development',
+          description: 'We develop serious games for industrial and educational applications to train employees or students, raise awareness, and teach new skills.' },
+        { title: 'Internet of Things and Robotics',
+          description: 'We enhance your business with IoT and robotics solutions. We control devices remotely and manage data through sensors and mobile robots.' },
+        { title: 'Software, Web and Mobile Development',
+          description: 'We build user-friendly web apps and mobile applications tailored to your industry, aligned with your brand image and business objectives.' },
+      ],
+    },
+    partners: {
+      heading: 'Our Partners',
+    },
+    contact: {
+      heading:     'Innovation begins with a conversation.',
+      fullName:    'Full Name*',
+      institution: 'Institution Name*',
+      phone:       'Phone*',
+      industry:    'Industry',
+      email:       'Email*',
+      description: 'Description',
+      submit:      'Submit',
+      notRobot:    "I'm not a robot",
+      emailLabel:  'E-mail',
+    },
+    servicesPage: {
+      hero: 'Services',
+    },
+    careers: {
+      heading: 'Our collaborators make us different and proud!',
+      desc1:   'Upscale Hub offers a dynamic and positive work environment that fosters your growth and professional development. We are committed to offering our team members opportunities to develop their careers and be part of a work community that values every contribution.',
+      desc2:   'Through our collaborations with Antonine University (UA) in Lebanon, the Faculty of Engineering and Technology (FET) and its TICKET Lab research center, we create an environment that fosters creativity and team advancement.',
+      desc3:   'We are committed to equal opportunity in employment, ensuring that all qualified candidates are considered, regardless of their background or status.',
+      cta:     'Send your CV to hr@upscale-hub.com to join our team.',
+      msgLabel: 'Message:',
+      cvLabel:  'Upload CV:',
+      submit:   'Send',
+    },
+    aboutPage: {
+      hero: 'About Us',
+      desc1: 'Upscale Hub is a dynamic company committed to providing customized tech solutions tailored to the unique needs of our esteemed global clientele.',
+      desc2: 'Specializing in software and hardware solutions, our team comprises experts and talents dedicated to delivering high-quality solutions that scale and elevate the operations of our clients.',
+      desc3: 'Upscale Hub actively invests in research and development (R&D) by fostering interdisciplinary applied research aligned with the market\'s needs to contribute to the growth of the global community.',
+      missionTitle:  'Mission',
+      missionDesc:   'Upscale Hub is committed to delivering innovative and customized solutions designed to accelerate the steady growth of our diverse range of multidisciplinary partners.',
+      visionTitle:   'Vision',
+      visionDesc:    'Upscale Hub envisions empowering young talents to serve as catalysts for innovative change, shaping a sustainable and brighter future for all.',
+      valuesTitle: 'Our Values',
+      values: [
+        { label: 'Innovation'   },
+        { label: 'Growth'       },
+        { label: 'Creativity'   },
+        { label: 'Trust'        },
+        { label: 'Transparency' },
+        { label: 'Efficiency'   },
+      ],
+      whatWeDoTitle: 'What we do',
+      whatWeDo: [
+        {
+          title: 'Design Tailored Innovative Solutions',
+          subtitle: 'We believe in our partner\'s uniqueness.',
+          desc: 'We listen thoroughly to understand the unique needs of our clients, ensuring that we craft solutions that perfectly fit your desires.',
+        },
+        {
+          title: 'Invest in Research and Development',
+          subtitle: 'We push the boundaries of what\'s possible.',
+          desc: 'We actively invest in R&D to develop cutting-edge technologies and methodologies that keep our clients ahead of the curve.',
+        },
+        {
+          title: 'Invest in Your Growth Journey',
+          subtitle: 'Your success is our success.',
+          desc: 'We are dedicated to supporting your growth at every stage, providing the tools, expertise, and guidance you need to thrive.',
+        },
+        {
+          title: 'Empower Our Talents',
+          subtitle: 'People are our greatest asset.',
+          desc: 'We foster a culture of continuous learning and innovation, empowering our team to deliver exceptional results for our partners.',
+        },
+      ],
+    },
+    
+  },
+
+  fr: {
+    nav: {
+      about:    'À Propos',
+      services: 'Services',
+      careers:  'Carrières',
+      contact:  'Contactez-nous',
+      training: 'Centre de Formation',
+    },
+    hero: {
+      slides: [
+        { heading: ['Nous Investissons Dans', 'Votre Croissance']  },
+        { heading: ['Nous Construisons',      'Votre Futur Digital'] },
+        { heading: ['Nous Alimentons',        'Votre Innovation']   },
+      ],
+      cta: 'en savoir plus',
+    },
+    footer: {
+      copy: '2024 © Upscale Hub. Tous droits réservés.',
+    },
+    whyus: {
+      heading: 'Fournir un flux <strong>créatif</strong> de <strong>solutions</strong> élaborées avec <strong>expertise</strong>',
+      desc:    'Nos talents pensent en dehors des sentiers battus pour générer des idées innovantes et trouver de nouvelles solutions.',
+      cta:     'en savoir plus',
+    },
+    services: {
+      heading: 'Nos Services',
+      items: [
+        { title: 'Transformation Numérique',
+          description: 'Nous aidons les organisations à moderniser leurs opérations en remplaçant les processus manuels et fragmentés par des systèmes numériques intégrés et des agents IA.' },
+        { title: 'Intelligence Artificielle',
+          description: 'Nous révolutionnons vos opérations grâce à nos solutions basées sur l\'IA et nos implémentations de machine learning innovantes.' },
+        { title: 'Développement de Jeux',
+          description: 'Nous développons des jeux sérieux pour des applications industrielles et éducatives afin de former les employés ou les étudiants.' },
+        { title: 'Internet des Objets et Robotique',
+          description: 'Nous améliorons votre activité avec des solutions IoT et robotiques. Nous contrôlons les appareils à distance et gérons les données via des capteurs.' },
+        { title: 'Développement Logiciel, Web et Mobile',
+          description: 'Nous créons des applications web et mobiles conviviales adaptées à votre secteur, alignées sur votre image de marque et vos objectifs.' },
+      ],
+    },
+    partners: {
+      heading: 'Nos Partenaires',
+    },
+    contact: {
+      heading:     "L'innovation commence par une conversation.",
+      fullName:    'Nom complet*',
+      institution: "Nom de l'institution*",
+      phone:       'Téléphone*',
+      industry:    'Secteur',
+      email:       'E-mail*',
+      description: 'Description',
+      submit:      'Envoyer',
+      notRobot:    'Je ne suis pas un robot',
+      emailLabel:  'E-mail',
+    },
+    servicesPage: {
+      hero: 'Services',
+    },
+    careers: {
+      heading: 'Nos collaborateurs nous différencient et nous rendent fiers !',
+      desc1:   'Upscale Hub offre un environnement de travail dynamique et positif qui favorise votre croissance et votre développement professionnels. Nous sommes déterminés à offrir aux membres de notre équipe des opportunités de développer leur carrière et de faire partie d\'une communauté de travail qui valorise chaque contribution.',
+      desc2:   'Grâce à nos collaborations avec l\'Université Antonine (UA) au Liban, la Faculté d\'ingénierie et de technologie (FET) et son centre de recherche TICKET Lab, nous créons un environnement qui favorise la créativité et l\'avancement de l\'équipe.',
+      desc3:   'Nous nous engageons à respecter l\'égalité des chances en matière d\'emploi, en veillant à ce que tous les candidats qualifiés soient pris en considération, quels que soient leurs parcours ou leur statut.',
+      cta:     'Envoyez votre CV à hr@upscale-hub.com pour rejoindre notre équipe.',
+      msgLabel: 'Message :',
+      cvLabel:  'Télécharger le CV :',
+      submit:   'Envoyer',
+    },
+    aboutPage: {
+      hero: 'À Propos',
+      desc1: 'Upscale Hub est une entreprise dynamique engagée à fournir des solutions technologiques personnalisées adaptées aux besoins uniques de notre clientèle mondiale.',
+      desc2: 'Spécialisée dans les solutions logicielles et matérielles, notre équipe est composée d\'experts et de talents dédiés à fournir des solutions de haute qualité qui améliorent les opérations de nos clients.',
+      desc3: 'Upscale Hub investit activement dans la recherche et le développement (R&D) en favorisant la recherche appliquée interdisciplinaire alignée sur les besoins du marché pour contribuer à la croissance de la communauté mondiale.',
+      missionTitle:  'Mission',
+      missionDesc:   'Upscale Hub s\'engage à fournir des solutions innovantes et personnalisées conçues pour accélérer la croissance de nos partenaires multidisciplinaires.',
+      visionTitle:   'Vision',
+      visionDesc:    'Upscale Hub envisage d\'autonomiser les jeunes talents pour qu\'ils servent de catalyseurs au changement innovant, façonnant un avenir durable et meilleur.',
+      valuesTitle: 'Nos Valeurs',
+      values: [
+        { label: 'Innovation'    },
+        { label: 'Croissance'    },
+        { label: 'Créativité'    },
+        { label: 'Confiance'     },
+        { label: 'Transparence'  },
+        { label: 'Efficacité'    },
+      ],
+      whatWeDoTitle: 'Ce que nous faisons',
+      whatWeDo: [
+        {
+          title: 'Concevoir des Solutions Innovantes Sur Mesure',
+          subtitle: 'Nous croyons en l\'unicité de nos partenaires.',
+          desc: 'Nous écoutons attentivement pour comprendre les besoins uniques de nos clients et créer des solutions parfaitement adaptées.',
+        },
+        {
+          title: 'Investir dans la Recherche et le Développement',
+          subtitle: 'Nous repoussons les limites du possible.',
+          desc: 'Nous investissons activement dans la R&D pour développer des technologies de pointe qui maintiennent nos clients à l\'avant-garde.',
+        },
+        {
+          title: 'Investir dans Votre Parcours de Croissance',
+          subtitle: 'Votre succès est notre succès.',
+          desc: 'Nous accompagnons votre croissance à chaque étape en fournissant les outils, l\'expertise et les conseils dont vous avez besoin.',
+        },
+        {
+          title: 'Autonomiser Nos Talents',
+          subtitle: 'Les personnes sont notre plus grand atout.',
+          desc: 'Nous favorisons une culture d\'apprentissage continu et d\'innovation pour offrir des résultats exceptionnels à nos partenaires.',
+        },
+      ],
+    },
+  },
+}
+
+export default translations

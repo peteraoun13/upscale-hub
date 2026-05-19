@@ -1,0 +1,130 @@
+.whyus {
+  position: relative;
+  background: var(--color-brand-blue);
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+/* ── Watermark PNG — right side on desktop ── */
+.whyus__watermark {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  object-position: left center;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Inner layout ── */
+.whyus__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 var(--section-px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+}
+
+/* ── Image ── */
+/* ── Image ── */
+.whyus__image-wrap {
+  border-radius: 24px 124px 24px 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 550px;
+}
+
+.whyus__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 24px;
+}
+
+/* ── Text content ── */
+.whyus__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.whyus__heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-white);
+  line-height: 1.4;
+}
+
+.whyus__heading strong {
+  font-weight: var(--weight-bold);
+}
+
+.whyus__desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  max-width: 460px;
+}
+
+/* ── CTA button ── */
+.whyus__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  padding: 0.6rem 2rem;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.whyus__cta:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .whyus__watermark {
+     max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .whyus__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .whyus__content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .whyus__desc {
+    max-width: 100%;
+  }
+
+  .whyus__cta {
+    align-self: center;
+  }
+}

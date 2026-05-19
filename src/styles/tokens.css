@@ -1,0 +1,35 @@
+:root {
+  /* ── Colors ── */
+  --color-brand-blue:  #007BFF;
+  --color-brand-cyan:  #00BFFF;
+  --color-brand-navy:  #0A1F5C;
+  --color-hero-mid:    #0077CC;
+  --color-text-white:  #FFFFFF;
+  --color-text-nav:    rgba(255, 255, 255, 0.92);
+  --color-cta-bg:      #1A72E8;
+  --color-cta-hover:   #0F5EC4;
+    --color-text-dark:    #0A1F5C;
+  --color-text-body:    #666666;
+  --color-icon-red:     #FF6566;
+  --color-icon-circle:  #D6EEFF;
+  --radius-card:        16px;
+
+  /* ── Fonts ── */
+  --font-display: 'Poppins', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  /* ── Font weights ── */
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ── Spacing ── */
+  --nav-height:  80px;
+  --section-px:  clamp(1.5rem, 5vw, 5rem);
+
+  /* ── Other ── */
+  --radius-pill:     50px;
+  --transition-fast: 0.2s ease;
+  --transition-med:  0.35s ease;
+  --z-nav:           100;
+}
