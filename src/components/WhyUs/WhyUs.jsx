@@ -1,10 +1,13 @@
+import { Link } from 'react-router-dom'
 import './WhyUs.css'
 import whyImage     from '../../assets/why-image.png'
 import whyWatermark from '../../assets/why-watermark.png'
 import { useTranslation } from '../../i18n/useTranslation'
+import { useNavigationLoading } from '../../navigation/NavigationLoadingContext'
 
 export default function WhyUs() {
   const { t } = useTranslation()
+  const beginNavigationLoading = useNavigationLoading()
 
   return (
     <section className="whyus" id="about">
@@ -34,7 +37,13 @@ export default function WhyUs() {
             dangerouslySetInnerHTML={{ __html: t('whyus.heading') }}
           />
           <p className="whyus__desc">{t('whyus.desc')}</p>
-          <a href="#services" className="whyus__cta">{t('whyus.cta')}</a>
+          <Link
+            to="/about"
+            className="whyus__cta"
+            onClick={() => beginNavigationLoading('/about')}
+          >
+            {t('whyus.cta')}
+          </Link>
         </div>
 
       </div>

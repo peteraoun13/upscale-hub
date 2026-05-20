@@ -3,11 +3,110 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/src/assets/upscale_logo.png" />
+    <link rel="preload" as="image" href="/src/assets/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>Upscale Hub</title>
+    <style>
+      .initial-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        background: #007bff;
+        color: #ffffff;
+      }
+
+      .initial-loader__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateY(-2vh);
+      }
+
+      .initial-loader__logo {
+        width: clamp(220px, 18vw, 380px);
+        height: auto;
+        display: block;
+      }
+
+      .initial-loader__dots {
+        display: flex;
+        gap: 11px;
+        margin-top: clamp(1.25rem, 2vw, 1.8rem);
+      }
+
+      .initial-loader__dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: currentColor;
+        opacity: 0.42;
+        animation: initialLoaderDot 1.15s ease-in-out infinite;
+      }
+
+      .initial-loader__dots span:nth-child(2) { animation-delay: 0.12s; }
+      .initial-loader__dots span:nth-child(3) { animation-delay: 0.24s; }
+      .initial-loader__dots span:nth-child(4) { animation-delay: 0.36s; }
+      .initial-loader__dots span:nth-child(5) { animation-delay: 0.48s; }
+      .initial-loader__dots span:nth-child(6) { animation-delay: 0.6s; }
+      .initial-loader__dots span:nth-child(7) { animation-delay: 0.72s; }
+
+      @keyframes initialLoaderDot {
+        0%, 72%, 100% {
+          opacity: 0.42;
+          transform: scale(0.88);
+        }
+
+        36% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .initial-loader__logo {
+          width: min(66vw, 260px);
+        }
+
+        .initial-loader__dots {
+          gap: 9px;
+        }
+
+        .initial-loader__dots span {
+          width: 8px;
+          height: 8px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .initial-loader__dots span {
+          animation: none;
+          opacity: 0.8;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="initial-loader" role="status" aria-label="Loading Upscale Hub">
+        <div class="initial-loader__content">
+          <img class="initial-loader__logo" src="/src/assets/logo.png" alt="" />
+          <div class="initial-loader__dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

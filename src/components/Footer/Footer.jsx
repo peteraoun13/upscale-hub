@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './Footer.css'
 import { useTranslation } from '../../i18n/useTranslation'
 
@@ -6,6 +7,7 @@ import linkedinImg from '../../assets/social-linkedin.png'
 import instaImg    from '../../assets/social-instagram.png'
 import xImg        from '../../assets/social-x.png'
 import facebookImg from '../../assets/social-facebook.png'
+import { useNavigationLoading } from '../../navigation/NavigationLoadingContext'
 
 const SOCIAL = [
   { label: 'LinkedIn',  href: '#', icon: linkedinImg },
@@ -16,12 +18,13 @@ const SOCIAL = [
 
 export default function Footer() {
   const { t } = useTranslation()
+  const beginNavigationLoading = useNavigationLoading()
 
   const FOOTER_LINKS = [
-    { key: 'about',    href: '#about'    },
-    { key: 'services', href: '#services' },
-    { key: 'careers',  href: '#careers'  },
-    { key: 'contact',  href: '#contact'  },
+    { key: 'about',    to: '/about'    },
+    { key: 'services', to: '/services' },
+    { key: 'careers',  to: '/careers'  },
+    { key: 'contact',  to: '/contact'  },
   ]
 
   return (
@@ -31,16 +34,25 @@ export default function Footer() {
       <div className="footer__top">
 
         {/* Logo */}
-        <a href="/" className="footer__logo">
+        <Link
+          to="/"
+          className="footer__logo"
+          onClick={() => beginNavigationLoading('/')}
+        >
           <img src={logoImg} alt="Upscale Hub" className="footer__logo-img" />
-        </a>
+        </Link>
 
         {/* Nav links — translated */}
         <nav className="footer__links">
           {FOOTER_LINKS.map((link) => (
-            <a key={link.key} href={link.href} className="footer__link">
+            <Link
+              key={link.key}
+              to={link.to}
+              className="footer__link"
+              onClick={() => beginNavigationLoading(link.to)}
+            >
               {t(`nav.${link.key}`)}
-            </a>
+            </Link>
           ))}
         </nav>
 

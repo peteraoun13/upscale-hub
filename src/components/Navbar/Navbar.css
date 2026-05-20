@@ -57,7 +57,7 @@
   text-decoration: none;
   position: relative;
   padding-left: 20px;
-  transition: color var(--transition-fast);
+  transition: color 0.12s ease;
 }
 
 /* Line — anchored to left, grows with scaleX */
@@ -73,7 +73,8 @@
   transform: translateY(-50%) scaleX(0);
   transform-origin: left center;
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+  transition: transform 0.16s ease-out, opacity 0.12s ease-out;
 }
 
 .navbar__link:hover {
@@ -84,12 +85,6 @@
   transform: translateY(-50%) scaleX(1);
   transform-origin: left center;
   opacity: 1;
-}
-
-.navbar__link:not(:hover)::before {
-  transform: translateY(-50%) scaleX(0);
-  transform-origin: right center;
-  opacity: 0;
 }
 
 .navbar__link--active {
@@ -107,7 +102,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  transition: color var(--transition-fast);
+  transition: color 0.12s ease;
 }
 
 /* Same line animation as nav links */
@@ -123,19 +118,14 @@
   transform: translateY(-50%) scaleX(0);
   transform-origin: left center;
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+  transition: transform 0.16s ease-out, opacity 0.12s ease-out;
 }
 
 .navbar__lang:hover::before {
   transform: translateY(-50%) scaleX(1);
   transform-origin: left center;
   opacity: 1;
-}
-
-.navbar__lang:not(:hover)::before {
-  transform: translateY(-50%) scaleX(0);
-  transform-origin: right center;
-  opacity: 0;
 }
 
 /* ── Flag image ── */
@@ -252,6 +242,9 @@
 @media (max-width: 1100px) {
   .navbar--menu-open {
     box-shadow: none;
+    height: 100vh;
+    height: 100svh;
+    background: transparent;
   }
 
   .navbar--menu-open .navbar__logo {
@@ -265,6 +258,13 @@
     width: 44px;
     height: 44px;
     padding: 6px;
+  }
+
+  .navbar--menu-open .navbar__hamburger {
+    position: fixed;
+    top: max(18px, env(safe-area-inset-top, 0px));
+    right: var(--section-px);
+    z-index: 5;
   }
 
   .navbar__hamburger span {
@@ -291,16 +291,18 @@
     right: auto;
     bottom: 0;
     left: 0;
-    width: clamp(248px, 64vw, 350px);
+    width: min(82vw, 380px);
     height: 100vh;
-    height: 100dvh;
-    padding: 0;
+    height: 100svh;
+    max-height: 100svh;
+    padding: max(72px, calc(56px + env(safe-area-inset-top, 0px))) 0 0;
     background: #ffffff;
     border-top: 0;
     border-right: 1px solid #e7e7e7;
     box-shadow: 4px 0 20px rgba(10, 31, 92, 0.12);
     opacity: 1;
     overflow-y: auto;
+    overscroll-behavior: contain;
     transform: translateX(-104%);
     transition: transform 0.32s ease;
     z-index: 3;
@@ -368,7 +370,9 @@
   }
 
   .navbar__backdrop {
-    background: transparent;
+    min-height: 100vh;
+    min-height: 100svh;
+    background: rgba(10, 31, 92, 0.12);
     backdrop-filter: none;
     z-index: 2;
   }

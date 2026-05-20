@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Hero.css'
 import arrowLeftDefault  from '../../assets/arrow-left.png'
 import arrowLeftHover    from '../../assets/arrow-left-blue.png'
@@ -8,11 +9,13 @@ import hero1 from '../../assets/hero1.png'
 import hero2 from '../../assets/hero2.png'
 import hero3 from '../../assets/hero3.png'
 import { useTranslation } from '../../i18n/useTranslation'
+import { useNavigationLoading } from '../../navigation/NavigationLoadingContext'
 
 const SLIDE_IMAGES = [hero1, hero2, hero3]
 
 export default function Hero() {
   const { t } = useTranslation()
+  const beginNavigationLoading = useNavigationLoading()
   const [current, setCurrent]       = useState(0)
   const [leftHover, setLeftHover]   = useState(false)
   const [rightHover, setRightHover] = useState(false)
@@ -43,7 +46,13 @@ export default function Hero() {
             {slides[current].heading[0]}<br />
             {slides[current].heading[1]}
           </h1>
-          <a href="#services" className="hero__cta">{cta}</a>
+          <Link
+            to="/services"
+            className="hero__cta"
+            onClick={() => beginNavigationLoading('/services')}
+          >
+            {cta}
+          </Link>
         </div>
       </div>
 

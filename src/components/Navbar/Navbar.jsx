@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import './Navbar.css'
 import logo   from '../../assets/logo.png'
 import flagEN from '../../assets/flag-en.png'
 import flagFR from '../../assets/flag-fr.svg'
 import { useTranslation } from '../../i18n/useTranslation'
+import { useNavigationLoading } from '../../navigation/NavigationLoadingContext'
 
 function LanguageButton({ className = '', tabIndex, lang, toggleLang }) {
   return (
@@ -26,12 +27,12 @@ function LanguageButton({ className = '', tabIndex, lang, toggleLang }) {
 
 export default function Navbar() {
   const { t, lang, toggleLang } = useTranslation()
-  const navigate  = useNavigate()
+  const beginNavigationLoading = useNavigationLoading()
   const location  = useLocation()
   const [menuOpen, setMenuOpen]     = useState(false)
   const [scrolled, setScrolled]     = useState(false)
   const [isResizing, setIsResizing] = useState(false)
-  const [activeLink, setActiveLink] = useState('about')
+  const [activeLink, setActiveLink] = useState('')
   const hamburgerRef = useRef(null)
   const drawerRef = useRef(null)
   const resizeTimerRef = useRef(null)
@@ -112,14 +113,12 @@ export default function Navbar() {
     hamburgerRef.current?.focus()
   }
 
-  const handleNavClick = (link, event) => {
-    if (link.page) event?.preventDefault()
-    setActiveLink(link.key)
-    if (link.page) navigate(link.page)
+  const handleNavClick = (link) => {
+    setActiveLink(link.page ? '' : link.key)
   }
 
   const isActive = (link) =>
-    activeLink === link.key || location.pathname === link.page
+    link.page ? location.pathname === link.page : activeLink === link.key
 
   const mobileLabel = (key) => {
     if (lang !== 'fr') return t(`nav.${key}`)
@@ -137,21 +136,43 @@ export default function Navbar() {
     <header className={`navbar${scrolled ? ' navbar--scrolled' : ''}${menuOpen ? ' navbar--menu-open' : ''}${isResizing ? ' navbar--resizing' : ''}`}>
       <div className="navbar__inner">
 
-        <a href="/" className="navbar__logo">
+        <Link
+          to="/"
+          className="navbar__logo"
+          onClick={() => {
+            setActiveLink('')
+            beginNavigationLoading('/')
+          }}
+        >
           <img src={logo} alt="Upscale Hub" className="navbar__logo-img" />
-        </a>
+        </Link>
 
         <nav className="navbar__links">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.key}
-              href={link.href}
-              className={`navbar__link${isActive(link) ? ' navbar__link--active' : ''}`}
-              onClick={(event) => handleNavClick(link, event)}
-              style={{ cursor: 'pointer' }}
-            >
-              {t(`nav.${link.key}`)}
-            </a>
+            link.page ? (
+              <Link
+                key={link.key}
+                to={link.page}
+                className={`navbar__link${isActive(link) ? ' navbar__link--active' : ''}`}
+                onClick={() => {
+                  handleNavClick(link)
+                  beginNavigationLoading(link.page)
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                {t(`nav.${link.key}`)}
+              </Link>
+            ) : (
+              <a
+                key={link.key}
+                href={link.href}
+                className={`navbar__link${isActive(link) ? ' navbar__link--active' : ''}`}
+                onClick={() => handleNavClick(link)}
+                style={{ cursor: 'pointer' }}
+              >
+                {t(`nav.${link.key}`)}
+              </a>
+            )
           ))}
           <LanguageButton lang={lang} toggleLang={toggleLang} />
         </nav>
@@ -177,16 +198,33 @@ export default function Navbar() {
       >
         <nav className="drawer__links" aria-label="Mobile navigation">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.key}
-              href={link.href}
-              className={`drawer__link${isActive(link) ? ' drawer__link--active' : ''}`}
-              onClick={(event) => { handleNavClick(link, event); setMenuOpen(false) }}
-              tabIndex={menuOpen ? 0 : -1}
-              style={{ cursor: 'pointer' }}
-            >
-              {mobileLabel(link.key)}
-            </a>
+            link.page ? (
+              <Link
+                key={link.key}
+                to={link.page}
+                className={`drawer__link${isActive(link) ? ' drawer__link--active' : ''}`}
+                onClick={() => {
+                  handleNavClick(link)
+                  beginNavigationLoading(link.page)
+                  setMenuOpen(false)
+                }}
+                tabIndex={menuOpen ? 0 : -1}
+                style={{ cursor: 'pointer' }}
+              >
+                {mobileLabel(link.key)}
+              </Link>
+            ) : (
+              <a
+                key={link.key}
+                href={link.href}
+                className={`drawer__link${isActive(link) ? ' drawer__link--active' : ''}`}
+                onClick={() => { handleNavClick(link); setMenuOpen(false) }}
+                tabIndex={menuOpen ? 0 : -1}
+                style={{ cursor: 'pointer' }}
+              >
+                {mobileLabel(link.key)}
+              </a>
+            )
           ))}
           <LanguageButton
             className="drawer__lang"
