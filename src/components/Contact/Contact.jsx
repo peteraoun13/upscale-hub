@@ -24,11 +24,11 @@ const INITIAL = {
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 
 const VALIDATORS = {
-  fullName: (v) => v.trim().length < 2 ? 'Full name is required.' : '',
-  institution: (v) => v.trim().length < 2 ? 'Institution name is required.' : '',
-  phone: (v) => !/^\+?[\d\s\-()]{6,}$/.test(v.trim()) ? 'Enter a valid phone number.' : '',
+  fullName: (v) => v.trim().length < 2 ? 'validation.fullNameRequired' : '',
+  institution: (v) => v.trim().length < 2 ? 'validation.institutionRequired' : '',
+  phone: (v) => !/^\+?[\d\s\-()]{6,}$/.test(v.trim()) ? 'validation.phoneInvalid' : '',
   industry: () => '',
-  email: (v) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'Enter a valid email address.' : '',
+  email: (v) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'validation.emailInvalid' : '',
   description: () => '',
 }
 
@@ -130,7 +130,7 @@ export default function Contact() {
     }
 
     if (!RECAPTCHA_SITE_KEY || !captchaToken) {
-      setErrors(err => ({ ...err, captcha: 'Please complete the reCAPTCHA.' }))
+      setErrors(err => ({ ...err, captcha: 'validation.captchaRequired' }))
       return
     }
 
@@ -204,7 +204,7 @@ export default function Contact() {
                 value={form.fullName}
                 onChange={handleChange}
               />
-              {errors.fullName && <span className="contact__error">{errors.fullName}</span>}
+              {errors.fullName && <span className="contact__error">{t(errors.fullName)}</span>}
             </div>
             <div className="contact__field">
               <input
@@ -215,7 +215,7 @@ export default function Contact() {
                 value={form.institution}
                 onChange={handleChange}
               />
-              {errors.institution && <span className="contact__error">{errors.institution}</span>}
+              {errors.institution && <span className="contact__error">{t(errors.institution)}</span>}
             </div>
           </div>
 
@@ -229,7 +229,7 @@ export default function Contact() {
                 value={form.phone}
                 onChange={handleChange}
               />
-              {errors.phone && <span className="contact__error">{errors.phone}</span>}
+              {errors.phone && <span className="contact__error">{t(errors.phone)}</span>}
             </div>
             <div className="contact__field">
               <input
@@ -252,7 +252,7 @@ export default function Contact() {
               value={form.email}
               onChange={handleChange}
             />
-            {errors.email && <span className="contact__error">{errors.email}</span>}
+            {errors.email && <span className="contact__error">{t(errors.email)}</span>}
           </div>
 
           <textarea
@@ -271,7 +271,7 @@ export default function Contact() {
               <p className="contact__captcha-missing">reCAPTCHA site key is missing.</p>
             )}
           </div>
-          {errors.captcha && <span className="contact__error">{errors.captcha}</span>}
+          {errors.captcha && <span className="contact__error">{t(errors.captcha)}</span>}
 
           {status === 'error' && (
             <p className="contact__feedback contact__feedback--error">

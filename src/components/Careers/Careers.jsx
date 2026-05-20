@@ -13,15 +13,15 @@ function validate(message, cv) {
   const errors = {}
 
   if (message.trim().length < 10) {
-    errors.message = 'Please write a short message of at least 10 characters.'
+    errors.message = 'validation.messageShort'
   }
 
   if (!cv) {
-    errors.cv = 'Please upload your CV.'
+    errors.cv = 'validation.cvRequired'
   } else if (cv.size > MAX_FILE_SIZE) {
-    errors.cv = 'CV file must be 5 MB or smaller.'
+    errors.cv = 'validation.cvTooLarge'
   } else if (!ALLOWED_TYPES.includes(cv.type)) {
-    errors.cv = 'CV must be a PDF, DOC, or DOCX file.'
+    errors.cv = 'validation.cvInvalidType'
   }
 
   return errors
@@ -119,7 +119,7 @@ export default function Careers() {
                 rows={5}
               />
               <span className={`careers__error${errors.message ? '' : ' careers__error--empty'}`}>
-                {errors.message || 'Message validation placeholder'}
+                {errors.message ? t(errors.message) : 'Message validation placeholder'}
               </span>
             </div>
 
@@ -140,7 +140,7 @@ export default function Careers() {
               />
               <p className="careers__hint">PDF, DOC, or DOCX. Max 5 MB.</p>
               <span className={`careers__error${errors.cv ? '' : ' careers__error--empty'}`}>
-                {errors.cv || 'CV validation placeholder'}
+                {errors.cv ? t(errors.cv) : 'CV validation placeholder'}
               </span>
             </div>
 
