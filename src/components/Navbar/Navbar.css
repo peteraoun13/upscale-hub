@@ -250,6 +250,7 @@
     width: 44px;
     height: 44px;
     padding: 6px;
+    z-index: calc(var(--z-nav) + 2);
   }
 
   .navbar__hamburger span {
@@ -272,25 +273,25 @@
   }
 
   .navbar__drawer {
-    top: var(--nav-height);
-    right: 0;
+    top: 0;
+    right: auto;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: calc(100vh - var(--nav-height));
-    height: calc(100svh - var(--nav-height));
-    max-height: calc(100svh - var(--nav-height));
-    padding: 0;
+    width: min(82vw, 380px);
+    height: 100vh;
+    height: 100svh;
+    max-height: 100svh;
+    padding: max(72px, calc(56px + env(safe-area-inset-top, 0px))) 0 0;
     background: #ffffff;
     border-top: 0;
-    border-right: 0;
-    box-shadow: 0 12px 28px rgba(10, 31, 92, 0.12);
+    border-right: 1px solid #e7e7e7;
+    box-shadow: 4px 0 20px rgba(10, 31, 92, 0.12);
     opacity: 1;
     overflow-y: auto;
     overscroll-behavior: contain;
-    transform: translateX(-100%);
+    transform: translateX(-104%);
     transition: transform 0.32s ease;
-    z-index: calc(var(--z-nav) - 1);
+    z-index: calc(var(--z-nav) + 1);
   }
 
   .navbar__drawer.is-open {
@@ -355,11 +356,11 @@
   }
 
   .navbar__backdrop {
-    top: var(--nav-height);
+    top: 0;
     min-height: 100vh;
     min-height: 100svh;
     background: transparent;
     backdrop-filter: none;
-    z-index: calc(var(--z-nav) - 2);
+    z-index: var(--z-nav);
   }
 }
