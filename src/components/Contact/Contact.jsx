@@ -268,14 +268,14 @@ export default function Contact() {
             {RECAPTCHA_SITE_KEY ? (
               <div ref={captchaRef} />
             ) : (
-              <p className="contact__captcha-missing">reCAPTCHA site key is missing.</p>
+              <p className="contact__captcha-missing">{t('contact.captchaMissing')}</p>
             )}
           </div>
           {errors.captcha && <span className="contact__error">{t(errors.captcha)}</span>}
 
           {status === 'error' && (
             <p className="contact__feedback contact__feedback--error">
-              Something went wrong. Please try again.
+              {t('contact.error')}
             </p>
           )}
 
@@ -284,7 +284,7 @@ export default function Contact() {
             className="contact__submit"
             disabled={status === 'sending'}
           >
-            {status === 'sending' ? 'Sending...' : t('contact.submit')}
+            {status === 'sending' ? t('contact.sending') : t('contact.submit')}
           </button>
         </form>
       </div>
@@ -294,7 +294,7 @@ export default function Contact() {
           <button
             className="contact-modal__backdrop"
             type="button"
-            aria-label="Close success message"
+            aria-label={t('contact.successCloseLabel')}
             onClick={() => setStatus('idle')}
           />
           <div
@@ -308,9 +308,9 @@ export default function Contact() {
               <span />
             </div>
             <div className="contact-modal__copy">
-              <h3 id="contact-success-title">Message sent successfully!</h3>
+              <h3 id="contact-success-title">{t('contact.successTitle')}</h3>
               <p id="contact-success-desc">
-                Thank you for reaching out. We received your information and will get back to you soon.
+                {t('contact.successDesc')}
               </p>
             </div>
             <button
@@ -319,7 +319,7 @@ export default function Contact() {
               type="button"
               onClick={() => setStatus('idle')}
             >
-              Close
+              {t('contact.close')}
             </button>
           </div>
         </div>

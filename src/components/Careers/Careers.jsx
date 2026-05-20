@@ -138,7 +138,7 @@ export default function Careers() {
                   if (errors.cv) setErrors(current => ({ ...current, cv: '' }))
                 }}
               />
-              <p className="careers__hint">PDF, DOC, or DOCX. Max 5 MB.</p>
+              <p className="careers__hint">{t('careers.fileHint')}</p>
               <span className={`careers__error${errors.cv ? '' : ' careers__error--empty'}`}>
                 {errors.cv ? t(errors.cv) : 'CV validation placeholder'}
               </span>
@@ -146,12 +146,12 @@ export default function Careers() {
 
             {status === 'error' && (
               <p className="careers__feedback careers__feedback--error">
-                Something went wrong. Please try again.
+                {t('careers.error')}
               </p>
             )}
 
             <button type="submit" className="careers__submit" disabled={status === 'sending'}>
-              {status === 'sending' ? 'Sending...' : t('careers.submit')}
+              {status === 'sending' ? t('careers.sending') : t('careers.submit')}
             </button>
           </form>
         </div>
@@ -162,7 +162,7 @@ export default function Careers() {
           <button
             className="careers-modal__backdrop"
             type="button"
-            aria-label="Close success message"
+            aria-label={t('careers.successCloseLabel')}
             onClick={() => setStatus('idle')}
           />
           <div
@@ -175,9 +175,9 @@ export default function Careers() {
             <div className="careers-modal__icon" aria-hidden="true">
               <span />
             </div>
-            <h3 id="careers-success-title">Application sent successfully!</h3>
+            <h3 id="careers-success-title">{t('careers.successTitle')}</h3>
             <p id="careers-success-desc">
-              Thank you for applying. Your message and CV were received.
+              {t('careers.successDesc')}
             </p>
             <button
               ref={closeRef}
@@ -185,7 +185,7 @@ export default function Careers() {
               type="button"
               onClick={() => setStatus('idle')}
             >
-              Close
+              {t('careers.close')}
             </button>
           </div>
         </div>
