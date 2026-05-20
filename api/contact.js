@@ -5,6 +5,7 @@ import {
   escapeHtml,
   getTransporter,
   json,
+  options,
 } from './mail.js'
 
 const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'peteraoun2013@gmail.com'
@@ -95,22 +96,22 @@ export async function POST(request) {
   try {
     payload = await request.json()
   } catch {
-    return json(400, { message: 'Invalid JSON body.' })
+    return json(400, { message: 'Invalid JSON body.' }, request)
   }
 
   const errors = validate(payload)
   if (Object.keys(errors).length > 0) {
-    return json(400, { message: 'Validation failed.', errors })
+    return json(400, { message: 'Validation failed.', errors }, request)
   }
 
   try {
     const captchaPassed = await verifyRecaptcha(payload.captchaToken)
     if (!captchaPassed) {
-      return json(400, { message: 'reCAPTCHA verification failed.' })
+      return json(400, { message: 'reCAPTCHA verification failed.' }, request)
     }
   } catch (error) {
     console.error('reCAPTCHA verification failed:', error)
-    return json(500, { message: 'Could not verify reCAPTCHA.' })
+    return json(500, { message: 'Could not verify reCAPTCHA.' }, request)
   }
 
   const data = {
@@ -136,11 +137,15 @@ export async function POST(request) {
       html,
     })
 
-    return json(200, { message: 'Message sent successfully.' })
+    return json(200, { message: 'Message sent successfully.' }, request)
   } catch (error) {
     console.error('Contact email failed:', error)
-    return json(500, { message: 'Could not send message.' })
+    return json(500, { message: 'Could not send message.' }, request)
   }
+}
+
+export async function OPTIONS(request) {
+  return options(request)
 }
 
 export async function GET() {
@@ -148,6 +153,11 @@ export async function GET() {
 }
 
 export default async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    await bridgeNodeRequest(req, res, '/api/contact', OPTIONS)
+    return
+  }
+
   if (req.method !== 'POST') {
     res.statusCode = 405
     res.setHeader('Content-Type', 'application/json; charset=utf-8')

@@ -5,6 +5,7 @@ import {
   escapeHtml,
   getTransporter,
   json,
+  options,
 } from './mail.js'
 
 export const config = {
@@ -71,7 +72,7 @@ export async function POST(request) {
   try {
     formData = await request.formData()
   } catch {
-    return json(400, { message: 'Invalid form submission.' })
+    return json(400, { message: 'Invalid form submission.' }, request)
   }
 
   const message = clean(formData.get('message'))
@@ -79,7 +80,7 @@ export async function POST(request) {
   const errors = validate(message, file)
 
   if (Object.keys(errors).length > 0) {
-    return json(400, { message: 'Validation failed.', errors })
+    return json(400, { message: 'Validation failed.', errors }, request)
   }
 
   const { subject, text, html } = buildMessage(message, file)
@@ -103,11 +104,15 @@ export async function POST(request) {
       ],
     })
 
-    return json(200, { message: 'Application sent successfully.' })
+    return json(200, { message: 'Application sent successfully.' }, request)
   } catch (error) {
     console.error('Career application email failed:', error)
-    return json(500, { message: 'Could not send application.' })
+    return json(500, { message: 'Could not send application.' }, request)
   }
+}
+
+export async function OPTIONS(request) {
+  return options(request)
 }
 
 export async function GET() {
@@ -115,6 +120,11 @@ export async function GET() {
 }
 
 export default async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    await bridgeNodeRequest(req, res, '/api/careers', OPTIONS)
+    return
+  }
+
   if (req.method !== 'POST') {
     res.statusCode = 405
     res.setHeader('Content-Type', 'application/json; charset=utf-8')

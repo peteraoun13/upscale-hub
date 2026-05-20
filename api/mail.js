@@ -1,6 +1,12 @@
 import nodemailer from 'nodemailer'
 import { resolve4 } from 'node:dns/promises'
 
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://upscale-hub.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5173',
+]
+
 export function clean(value) {
   return String(value || '').trim()
 }
@@ -19,8 +25,43 @@ export function escapeHtml(value) {
     .replace(/\n/g, '<br>')
 }
 
-export function json(status, data) {
-  return Response.json(data, { status })
+function allowedOrigins() {
+  return (process.env.CORS_ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(','))
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean)
+}
+
+export function corsHeadersFromOrigin(origin) {
+  const headers = new Headers({
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
+  })
+
+  if (origin && allowedOrigins().includes(origin)) {
+    headers.set('Access-Control-Allow-Origin', origin)
+  }
+
+  return headers
+}
+
+export function corsHeaders(request) {
+  return corsHeadersFromOrigin(request?.headers?.get('origin'))
+}
+
+export function options(request) {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders(request),
+  })
+}
+
+export function json(status, data, request) {
+  return Response.json(data, {
+    status,
+    headers: corsHeaders(request),
+  })
 }
 
 export async function getTransporter() {
@@ -77,6 +118,11 @@ export async function bridgeNodeRequest(req, res, route, handler) {
   const response = await handler(request)
 
   res.statusCode = response.status
-  res.setHeader('Content-Type', response.headers.get('content-type') || 'application/json; charset=utf-8')
+  response.headers.forEach((value, key) => {
+    res.setHeader(key, value)
+  })
+  if (!response.headers.has('content-type')) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+  }
   res.end(await response.text())
 }
