@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './Contact.css'
 import { useTranslation } from '../../i18n/useTranslation'
+import { apiUrl } from '../../api/client'
 
 import mapImg from '../../assets/contact-map.png'
 import phoneIcon from '../../assets/contact-phone.png'
@@ -137,7 +138,7 @@ export default function Contact() {
     setStatus('sending')
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(apiUrl('/api/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

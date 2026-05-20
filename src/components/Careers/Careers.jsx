@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './Careers.css'
 import { useTranslation } from '../../i18n/useTranslation'
+import { apiUrl } from '../../api/client'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 const ALLOWED_TYPES = [
@@ -70,7 +71,7 @@ export default function Careers() {
     body.append('cv', cv)
 
     try {
-      const response = await fetch('/api/careers', {
+      const response = await fetch(apiUrl('/api/careers'), {
         method: 'POST',
         body,
       })

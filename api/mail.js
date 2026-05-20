@@ -6,6 +6,7 @@ const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:5173',
 ]
+const LOCAL_DEV_ORIGIN = /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/
 
 export function clean(value) {
   return String(value || '').trim()
@@ -39,7 +40,7 @@ export function corsHeadersFromOrigin(origin) {
     'Vary': 'Origin',
   })
 
-  if (origin && allowedOrigins().includes(origin)) {
+  if (origin && (allowedOrigins().includes(origin) || LOCAL_DEV_ORIGIN.test(origin))) {
     headers.set('Access-Control-Allow-Origin', origin)
   }
 
