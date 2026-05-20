@@ -10,10 +10,10 @@ import facebookImg from '../../assets/social-facebook.png'
 import { useNavigationLoading } from '../../navigation/NavigationLoadingContext'
 
 const SOCIAL = [
-  { label: 'LinkedIn',  href: '#', icon: linkedinImg },
-  { label: 'Instagram', href: '#', icon: instaImg    },
-  { label: 'X',         href: '#', icon: xImg        },
-  { label: 'Facebook',  href: '#', icon: facebookImg },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/upscalehub', icon: linkedinImg },
+  { label: 'Instagram', href: 'https://www.instagram.com/upscale.hub?igsh=MXNwaGx6d2FkdjhnNg%3D%3D&utm_source=qr', icon: instaImg },
+  { label: 'X',         href: 'https://x.com/upscale_hub?s=21&t=r-7Q4PCxQ73HE__7ALlH2w', icon: xImg },
+  { label: 'Facebook',  href: 'https://www.facebook.com/people/Upscale-Hub/61558914682587/?mibextid=LQQJ4d', icon: facebookImg },
 ]
 
 export default function Footer() {
