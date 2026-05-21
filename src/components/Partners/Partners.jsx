@@ -9,16 +9,17 @@ import logo5 from '../../assets/InterOp-VLab.png'
 import logo6 from '../../assets/Mtein-Mchikha-Municipality.png'
 import logo7 from '../../assets/HyTIISeine.png'
 import logo8 from '../../assets/ITII-Ingenieur.png'
-
+import logo9 from '../../assets/La-FrenchTech.svg'
 const PARTNERS = [
   { id: 1, name: 'Université Antonine', logo: logo1, url: 'https://www.ua.edu.lb' },
-  { id: 2, name: 'Ticket Research Lab', logo: logo2, url: 'https://ticket.ua.edu.lb' },
+  { id: 2, name: 'Ticket Research Lab', logo: logo2, url: 'https://ua.edu.lb/en/research-units/ticket' },
   { id: 3, name: 'AtoS',                logo: logo3, url: 'https://www.atos.net' },
   { id: 4, name: 'Campus Biotech',      logo: logo4, url: 'https://www.campusbiotech.ch' },
   { id: 5, name: 'InterOP-VLab',        logo: logo5, url: 'https://interop-vlab.eu' },
-  { id: 6, name: 'Mtein Municipality',  logo: logo6, url: null },
-  { id: 7, name: 'HyTII-Seine',         logo: logo7, url: null },
-  { id: 8, name: 'ITII Ingénieur',      logo: logo8, url: 'https://www.itii.fr' },
+  { id: 6, name: 'Mtein Municipality',  logo: logo6, url: 'https://mteinmchikhamunicipality.gov.lb' },
+  { id: 7, name: 'HyTII-Seine',         logo: logo7, url: 'https://www.itii-ingenieur.fr/hytii-seine-itii-normandie/' },
+  { id: 9, name: 'La FRENCH TECH',      logo: logo9, url: 'https://annuaire.lafrenchtechlille.com/organisations/upscale-hub' },
+  { id: 8, name: 'ITII Ingénieur',      logo: logo8, url: 'https://www.itii-ingenieur.fr' },
 ]
 
 export default function Partners() {

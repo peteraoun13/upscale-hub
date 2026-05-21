@@ -93,6 +93,19 @@ export async function getTransporter() {
   })
 }
 
+export async function sendMail(message) {
+  if (process.env.EMAIL_DRY_RUN === 'true') {
+    console.info('EMAIL_DRY_RUN=true, email was not sent:', {
+      to: message.to,
+      subject: message.subject,
+    })
+    return { accepted: [message.to], dryRun: true }
+  }
+
+  const transporter = await getTransporter()
+  return transporter.sendMail(message)
+}
+
 export async function readNodeBody(req) {
   if (req.body) {
     if (Buffer.isBuffer(req.body)) return req.body

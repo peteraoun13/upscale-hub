@@ -3,9 +3,9 @@ import {
   clean,
   cleanHeader,
   escapeHtml,
-  getTransporter,
   json,
   options,
+  sendMail,
 } from './mail.js'
 
 export const config = {
@@ -86,10 +86,9 @@ export async function POST(request) {
   const { subject, text, html } = buildMessage(message, file)
 
   try {
-    const transporter = await getTransporter()
     const attachmentBuffer = Buffer.from(await file.arrayBuffer())
 
-    await transporter.sendMail({
+    await sendMail({
       from: `"Upscale Hub Careers" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: TO_EMAIL,
       subject,

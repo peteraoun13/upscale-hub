@@ -3,9 +3,9 @@ import {
   clean,
   cleanHeader,
   escapeHtml,
-  getTransporter,
   json,
   options,
+  sendMail,
 } from './mail.js'
 
 const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'peteraoun2013@gmail.com'
@@ -126,9 +126,7 @@ export async function POST(request) {
   const { subject, text, html } = buildMessage(data)
 
   try {
-    const transporter = await getTransporter()
-
-    await transporter.sendMail({
+    await sendMail({
       from: `"Upscale Hub Website" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: TO_EMAIL,
       replyTo: data.email,
